@@ -26,11 +26,12 @@ text:'批量修改图片 bits 通道 ',\
     bits[0]= "8位/通道";
     bits[1]= "16位/通道";
     bits[2]= "32位/通道";
-
+var bitsIndex = 0;
 
 showDialog();
 var docName;
- var sourceFolder ;
+var sourceFolder ;
+var dropDownList
 function showDialog () {
     win = new Window (res);
     sourceFolder = win.batGroup.sourceFolder;
@@ -44,16 +45,20 @@ function showDialog () {
     };
     
     var bitsCount = bits.length;
-    var dropDownList = win.batGroup.select.other.dropdownlist;
+    dropDownList = win.batGroup.select.other.dropdownlist;
     for(var i = 0; i < bitsCount; i++){//给下拉列表添加元素
         dropDownList.add("item",bits[i]);
     }
     dropDownList.items[0].selected=true;//使第一个被选中    
     
-    
+    dropDownList.onChange = function(){
+        bitsIndex = dropDownList.selection.index;
+        //log('dropDownList.selection.index: '+bitsIndex);
+    };
     
    win.buttons.btnOK.onClick = function () {
         this.parent.parent.close();
+      
         run();
         //getAllFilesFromPath();
     }
@@ -140,10 +145,19 @@ function logic(){
     
 	app.activeDocument.duplicate(); //创建文档副本*/
     
+    
     //这里写 批处理的逻辑
+    
+    var bitsEnums = [BitsPerChannelType.EIGHT,BitsPerChannelType.SIXTEEN,BitsPerChannelType.THIRTYTWO];
     var doc = app.activeDocument;
-    doc.bitsPerChannel = BitsPerChannelType.EIGHT;
-    doc.save();
+        
+     if(doc.bitsPerChannel != bitsEnums[bitsIndex]){
+        doc.bitsPerChannel = bitsEnums[bitsIndex];
+        doc.save();
+        
+     }
+    
+    doc.close (SaveOptions.DONOTSAVECHANGES);
     
  }
 
