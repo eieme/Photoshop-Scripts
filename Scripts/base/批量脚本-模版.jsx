@@ -94,7 +94,7 @@ function run(){
         if (file instanceof File){
             var filename = file.name;
             var ext = filename.toLowerCase().split('.').splice(-1);
-            log ("ext:"+ext);            
+           // log ("ext:"+ext);            
             if(ext =='png' || ext =='jpg' || ext == 'webp' || ext == 'psd' || ext == 'gif'){
                 open(file); 
                 logic();            
