@@ -38,7 +38,7 @@ function showDialog () {
       win.center();
       win.show();
  }
-
+//输出
 function log(text){
         $.writeln(text);
         alert (text);
@@ -91,9 +91,15 @@ function run(){
     }
     for (i=0;i<flielist.length;i++){
         var file = flielist[i];
-        if (file instanceof File){ //不处理隐藏文件
-            open(file); 
-            logic();
+        if (file instanceof File){
+            var filename = file.name;
+            var ext = filename.toLowerCase().split('.').splice(-1);
+            log ("ext:"+ext);            
+            if(ext =='png' || ext =='jpg' || ext == 'webp' || ext == 'psd' || ext == 'gif'){
+                open(file); 
+                logic();            
+            }
+            
         }
     }
 
@@ -110,7 +116,7 @@ function logic(){
 	new Folder(dir).create(); //创建文档同名目录
     
 	app.activeDocument.duplicate(); //创建文档副本
-    
+
     //这里写 批处理的逻辑
  }
 
