@@ -12,10 +12,6 @@ res ="dialog { \
 text:'"+title+"直接保存并关闭',\
         group: Group{orientation: 'column',alignChildren:'left',\
 				top:StaticText{text:'建议ICON尺寸：1024*1024或512*512'},\
-				timeline:Progressbar{bounds:[0,0,300,10] , minvalue:0,maxvalue:100}\
-                 folderO:Group{ orientation: 'row', \
-							b: Button {text:'ICON选择png', properties:{name:'open'} ,helpTip:'选后耐心等待'},\
-							},\
 				otherSet: Panel {orientation: 'column',alignChildren:'left',\
                         text: '选择导出类型', \
                             android: Checkbox { text:' Android项目',helpTip:'Android目录结构的'},\
@@ -23,34 +19,29 @@ text:'"+title+"直接保存并关闭',\
                             datum: Checkbox { text:' google资料提交',helpTip:'无目录结构的'},\
                             inland: Checkbox { text:' 国内资料提交',helpTip:'无目录结构的'},\
 						},\
+                       exportBtn: Button{ alignment:'right',text: '导出'},\
 				},\
 }";
 		
 win = new Window (res);
 
 //alert("Icon导出工具V1.0");
-// 打开文件夹的操作
-var folderOpen=win.group.folderO
 
-win.group.otherSet.android.value =false;//默认勾选
+win.group.otherSet.android.value =true;//默认勾选
 win.group.otherSet.ios.value =false;
 win.group.otherSet.datum.value =false;
 win.group.otherSet.inland.value =false;
-
-
-
-folderOpen.b.onClick = function() { 
-        OpenPng();
-}
+var exportBtn = win.group.exportBtn;
+exportBtn.onClick = function(){
+            OpenPng();
+            this.parent.parent.close();
+    };
 function OpenPng(){
 try
 {
-  var iTunesArtwork = File.openDialog("选择PNG文件.", "*.png", false);
+  //var iTunesArtwork = File.openDialog("选择PNG文件.", "*.png", false);
 
-  if (iTunesArtwork !== null) 
-  { 
-    var doc = open(iTunesArtwork, OpenDocumentType.PNG);
-    
+    var doc = app.activeDocument ;
     if (doc == null)
     {
       throw "有问题的文件。确保它是一个有效的PNG文件.";
@@ -189,8 +180,6 @@ try
                   doc.activeHistoryState = startState; 
                 }
         }
-
-  }
 }
 catch (exception)
 {
@@ -201,7 +190,7 @@ finally
 {
     if (doc != null){
              new Folder( app.activeDocument.path).execute();//打开文件夹
-            doc.close(SaveOptions.DONOTSAVECHANGES);
+            //doc.close(SaveOptions.DONOTSAVECHANGES);
                 app.preferences.rulerUnits = initialPrefs;
      }
 
