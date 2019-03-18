@@ -327,7 +327,8 @@ function formatNum(num,bits){
 function checkNum(editText,defaultNum){
     cacheValue.set(editText,defaultNum);
     editText.onChanging = function(){
-                if(isNaN(editText.text)){//非数字
+		var res = /[a-z]/i;
+                if(res.test(editText.text)){//非数字
                     editText.text = cacheValue.get(editText);
                 }else{
                      cacheValue.set(editText,editText.text);
